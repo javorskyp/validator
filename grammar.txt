@@ -58,4 +58,4 @@ single_connection -> connection_value JOIN connection_value join_connector NEWLI
 index_valueINT -> ID ARRAY_OPEN INT ARRAY_CLOSE
 join_connector ---> JOIN connection_value join_connector
 connection_value ---> GND
-connection_value ---> index_valueINT 
+connection_value ---> index_valueINT
