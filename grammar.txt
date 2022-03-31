@@ -1,0 +1,61 @@
+keywords = {'begin', 'resistor', 'capacitor', 'voltagesource', 'voltageprobe', 'currentsource', 'currentprobe', 'inductor', 'diode', 'end', 'gnd', 'EOF'} 
+
+('SCIFIC',   r'-?[1-9](\d*)(?:\.\d+)?[Ee][-+]?\d+'),  ##   Scientific notation values         ##
+('INT',      r'(?<![\.\w\-eE])-?(\d+)(?![\d\.Ee])'),  ##   Integer values                     ##
+('DECIMAL',  r'-?\d*(\.\d+)'),                        ##   Decimal values                     ## 
+('EQUAL',    r'='),                                   ##   Assignm operator                   ##
+('ID',       r'[A-Za-z_0-9]+'),                       ##   Identifiers                        ##
+('COMA',     r','),                                   ##   Coma                               ## 
+('SKIP',     r'([ \t])'),                             ##   Skip over spaces and tabs          ##
+('OBR',      r'\('),                                  ##   Open bracket round                 ##
+('CBR',      r'\)'),                                  ##   Close bracket round                ## 
+('ARRAY_OPEN',      r'\['),                           ##   Open ARRAY bracket                 ##
+('ARRAY_CLOSE',      r'\]'),                          ##   Close ARRAY bracket                ## 
+('JOIN',     r'\-\-'),                                ##   Circiut symbol of Joining between  ## 
+('NEWLINE',  r'\n'),                                  ##   End of line                        ## 
+
+program ---> BEGIN NEWLINE module_definitions module_emptySpace module_connections END
+
+module_definitions ---> define module_definitions 
+module_definitions ---> epsilon
+
+define ---> ID EQUAL key_state NEWLINE
+
+key_state : 
+resistor 
+capacitor 
+diode 
+voltagesource 
+currentsource 
+voltageprobe 
+currentprobe
+inductor
+
+resistor  ---> RESISTOR OBR number CBR
+capacitor ---> CAPACITOR OBR NUMBER CBR
+diode -> DIODE OBR diode_arguments CBR 
+voltagesource -> VOLTAGESOURCE OBR any_number CBR
+voltageprobe -> VOLTAGREPROBE OBR CBR 
+currentsource -> CURRENTSOURCE OBR any_number CBR
+currentprobe -> CURRENTPROBE OBR CBR
+inductor -> INDUCTOR OBR number CBR
+
+any_number -> number
+number ->  INT, DECIMAL, SCIFIC
+diode_arguments -> argument next_argument
+diode_arguments -> epsilon
+argument -> ID EQUAL number
+next_argument -> COMA argument next_argument
+next_argument -> epsilon
+
+module_emptySpace -> NEWLINE block_empty
+
+block_empty -> NEWLINE block_empty
+
+module_connections -> single_connection module_connections
+ 
+single_connection -> connection_value JOIN connection_value join_connector NEWLINE
+index_valueINT -> ID ARRAY_OPEN INT ARRAY_CLOSE
+join_connector ---> JOIN connection_value join_connector
+connection_value ---> GND
+connection_value ---> index_valueINT 
