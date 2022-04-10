@@ -7,4 +7,4 @@ This program cheque files with electrical cirtuist. I use three kind of tools.
 
 To cheque test file write: py validator.py --input test.net
 
-If you want see file after debuger(clenaer) without comments write: py validator.py --input test.net --clean
+If you want see file after debuger(cleaner) without comments write: py validator.py --input test.net --clean
